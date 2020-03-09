@@ -1,3 +1,7 @@
+// This is a simple Password Generator App that will generate random password maybe you can you them to secure your account.
+// I tried my best to make the code as simple as possible please dont mind the variable names.
+// Also this idea came in my mind after checking Traversy Media's latest video.
+
 // Clear the concole on every refresh
 console.clear();
 // set the body to full height
@@ -27,9 +31,8 @@ applyFill(slider.querySelector("input"));
 // This function is responsible to create the trailing color and setting the fill.
 function applyFill(slider) {
 	const percentage = (100 * (slider.value - slider.min)) / (slider.max - slider.min);
-	const bg = `linear-gradient(90deg, ${sliderProps.fill} ${percentage}%, ${
-		sliderProps.background
-	} ${percentage + 0.1}%)`;
+	const bg = `linear-gradient(90deg, ${sliderProps.fill} ${percentage}%, ${sliderProps.background} ${percentage +
+			0.1}%)`;
 	slider.style.background = bg;
 	sliderValue.setAttribute("data-length", slider.value);
 }
@@ -87,6 +90,9 @@ const copyInfo = document.querySelector(".result__info.right");
 // Text appear after copy button is clicked
 const copiedInfo = document.querySelector(".result__info.left");
 
+// if this variable is trye only then the copyBtn will appear, i.e. when the user first click generate the copyBth will interact.
+let generatedPassword = false;
+
 // Update Css Props of the COPY button
 // Getting the bounds of the result viewbox container
 let resultContainerBound = {
@@ -95,8 +101,19 @@ let resultContainerBound = {
 };
 // This will update the position of the copy button based on mouse Position
 resultContainer.addEventListener("mousemove", e => {
-	copyBtn.style.setProperty("--x", `${e.x - resultContainerBound.left}px`);
-	copyBtn.style.setProperty("--y", `${e.y - resultContainerBound.top}px`);
+	resultContainerBound = {
+		left: resultContainer.getBoundingClientRect().left,
+		top: resultContainer.getBoundingClientRect().top,
+	};
+	if(generatedPassword){
+		copyBtn.style.opacity = '1';
+		copyBtn.style.pointerEvents = 'all';
+		copyBtn.style.setProperty("--x", `${e.x - resultContainerBound.left}px`);
+		copyBtn.style.setProperty("--y", `${e.y - resultContainerBound.top}px`);
+	}else{
+		copyBtn.style.opacity = '0';
+		copyBtn.style.pointerEvents = 'none';
+	}
 });
 window.addEventListener("resize", e => {
 	resultContainerBound = {
@@ -131,6 +148,7 @@ generateBtn.addEventListener("click", () => {
 	const hasUpper = uppercaseEl.checked;
 	const hasNumber = numberEl.checked;
 	const hasSymbol = symbolEl.checked;
+	generatedPassword = true;
 	resultEl.innerText = generatePassword(length, hasLower, hasUpper, hasNumber, hasSymbol);
 	copyInfo.style.transform = "translateY(0%)";
 	copyInfo.style.opacity = "0.75";
@@ -142,9 +160,7 @@ generateBtn.addEventListener("click", () => {
 function generatePassword(length, lower, upper, number, symbol) {
 	let generatedPassword = "";
 	const typesCount = lower + upper + number + symbol;
-	const typesArr = [{ lower }, { upper }, { number }, { symbol }].filter(
-		item => Object.values(item)[0]
-	);
+	const typesArr = [{ lower }, { upper }, { number }, { symbol }].filter(item => Object.values(item)[0]);
 	if (typesCount === 0) {
 		return "";
 	}
@@ -156,3 +172,21 @@ function generatePassword(length, lower, upper, number, symbol) {
 	}
 	return generatedPassword.slice(0, length);
 }
+
+// function that handles the checkboxes state, so at least one needs to be selected. The last checkbox will be disabled.
+function disableOnlyCheckbox(){
+	let totalChecked = [uppercaseEl, lowercaseEl, numberEl, symbolEl].filter(el => el.checked)
+	totalChecked.forEach(el => {
+		if(totalChecked.length == 1){
+			el.disabled = true;
+		}else{
+			el.disabled = false;
+		}
+	})
+}
+
+[uppercaseEl, lowercaseEl, numberEl, symbolEl].forEach(el => {
+	el.addEventListener('click', () => {
+		disableOnlyCheckbox()
+	})
+})
