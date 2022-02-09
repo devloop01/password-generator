@@ -35,7 +35,7 @@ button {
   border-radius: 10px;
   -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.45), 0 4px 8px rgba(0, 0, 0, 0.35), 0 8px 12px rgba(0, 0, 0, 0.15);
           box-shadow: 0 0 5px rgba(0, 0, 0, 0.45), 0 4px 8px rgba(0, 0, 0, 0.35), 0 8px 12px rgba(0, 0, 0, 0.15);
-  font-family: "Montserrat";
+  font-family: "sans-serif";
 }
 
 .container h2.title {
