@@ -2,8 +2,6 @@
 // I tried my best to make the code as simple as possible please dont mind the variable names.
 // Also this idea came in my mind after checking Traversy Media's latest video.
 
-// Clear the concole on every refresh
-console.clear();
 // set the body to full height
 // document.body.style.height = `${innerHeight}px`
 
@@ -132,6 +130,7 @@ generateBtn.addEventListener("click", () => {
 	const hasSymbol = symbolEl.checked;
 	generatedPassword = true;
 	resultEl.innerText = generatePassword(length, hasLower, hasUpper, hasNumber, hasSymbol);
+	resultEl.style.fontSize = (30 - (length / 2)) + "px";
 	copyInfo.style.transform = "translateY(0%)";
 	copyInfo.style.opacity = "0.75";
 	copiedInfo.style.transform = "translateY(200%)";
